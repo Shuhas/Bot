@@ -3,6 +3,7 @@ from telegram import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton, 
 from Evos_bot import *
 
 try:
+    create_table_log()
     create_table()
 except Exception as e:
     pass
@@ -46,30 +47,17 @@ def btns(tip=None):
 
 def start(update, context):
     user = update.message.from_user
-    print(user)
-    update.message.reply_text(f"Assalomu alaykum {user.first_name}\nTilni tanlang 👇",
+    if get_one(user.id):
+        pass
+    else:
+        create_user(user_id=user.id, username=user.username)
+    update.message.reply_text(f"Assalomu alaykum Ismingizni kiriting",
                               reply_markup=btns('til'))
 
 
 def message_handler(update, context):
     msg = update.message.text
-    if msg == "🇺🇿 O'zbek tili":
-        update.message.reply_text("Bu yerda siz menyu bilan tanishishingiz va uyga buyurtma berishingiz mumkin!\n"
-                                  "\nMahsulotlarni 🍽 Katalog bo‘limidan tanlang", reply_markup=btns())
-    elif msg == "🍽 Katalog":
-        update.message.reply_html("Kategoriyalardan birini tanlang 👇", reply_markup=btns('menu'))
-    elif msg == "🍔 Gamburger":
-        update.message.reply_text("Tanishib chiqish uchun kategoriyani tanlang 👇",
-                                  reply_markup=btns('gamburger'))
-    elif msg == "BBQ Burger":
-        context.bot.send_photo(
-            chat_id=update.message.chat_id,
-            photo=open("Gamburger.jpg", "rb"),
-            caption="BBQ Burger\nNarxi: 23 000 so'm\n\nSonini tanlang yoki kiriting:",
-            reply_markup=btns("numbers")
-        )
-    elif msg.isdigit():
-        update.message.reply_text(f"{int(msg) * 23000} so'm")
+
 
 
 def inline_handler(update, context):
