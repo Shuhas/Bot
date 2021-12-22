@@ -47,10 +47,11 @@ def btns(tip=None):
 
 def start(update, context):
     user = update.message.from_user
-    if get_one(user.id):
-        pass
-    else:
+    try:
+        create_user_log(user_id=user.id)
         create_user(user_id=user.id, username=user.username)
+    except:
+        pass
     update.message.reply_text(f"Assalomu alaykum Ismingizni kiriting",
                               reply_markup=btns('til'))
 

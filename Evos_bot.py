@@ -41,3 +41,7 @@ def create_user(user_id, username):
     return get_one(user_id)
 
 
+def create_user_log(user_id):
+    sql = "insert into log (user_id, message) values (%s, %s)"
+    cur.execute(sql, [user_id, "{'state': 0}"])
+    con.commit()
