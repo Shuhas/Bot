@@ -20,7 +20,7 @@ def create_table():
 def create_table_log():
     cur.execute("""
         CREATE TABLE "log" (
-        "user_id"	INTEGER,
+        "user_id"	INTEGER UNIQUE,
         "message"	TEXT,
         PRIMARY KEY("user_id")
         );
@@ -42,6 +42,13 @@ def create_user(user_id, username):
 
 
 def create_user_log(user_id):
-    sql = "insert into log (user_id, message) values (%s, %s)"
-    cur.execute(sql, [user_id, "{'state': 0}"])
+    s = "{\'state\': 0}"
+    sql = f"""insert into log (user_id, message) values ({user_id}, "{s}")"""
+    cur.execute(sql)
     con.commit()
+
+def get_user_log(user_id):
+    cur.execute(f"select message from log where user_id={user_id}")
+    return cur.fetchone()
+
+

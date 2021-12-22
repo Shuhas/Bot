@@ -1,3 +1,5 @@
+import ast
+
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
 from Evos_bot import *
@@ -32,8 +34,8 @@ def btns(tip=None):
         for i in range(1, 9, 3):
             btn.append([
                 InlineKeyboardButton(f"{i}", callback_data=f"{i}"),
-                InlineKeyboardButton(f"{i+1}", callback_data=f"{i+1}"),
-                InlineKeyboardButton(f"{i+2}", callback_data=f"{i+2}")
+                InlineKeyboardButton(f"{i + 1}", callback_data=f"{i + 1}"),
+                InlineKeyboardButton(f"{i + 2}", callback_data=f"{i + 2}")
             ])
         return InlineKeyboardMarkup(btn)
     else:
@@ -44,21 +46,24 @@ def btns(tip=None):
         ]
     return ReplyKeyboardMarkup(btn, resize_keyboard=True)
 
+def to_dict(strr):
+    return ast.literal_eval(strr)
+
 
 def start(update, context):
     user = update.message.from_user
-    try:
+    if get_user_log(user.id) and get_one(user.id):
+        update.message.reply_text(f"Assalomu alaykum Ismingizni kiriting",
+                                  reply_markup=btns('til'))
+    else:
         create_user_log(user_id=user.id)
         create_user(user_id=user.id, username=user.username)
-    except:
-        pass
-    update.message.reply_text(f"Assalomu alaykum Ismingizni kiriting",
-                              reply_markup=btns('til'))
+    log = get_user_log(user.id)[0]
+    log = to_dict(log)
 
 
 def message_handler(update, context):
     msg = update.message.text
-
 
 
 def inline_handler(update, context):
