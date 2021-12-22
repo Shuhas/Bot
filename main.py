@@ -58,8 +58,9 @@ def start(update, context):
     else:
         create_user_log(user_id=user.id)
         create_user(user_id=user.id, username=user.username)
-    log = get_user_log(user.id)[0]
-    log = to_dict(log)
+    log = to_dict(get_user_log(user.id)[0])
+    log['state'] = 1
+    change_log(message=log, user_id=user.id)
 
 
 def message_handler(update, context):

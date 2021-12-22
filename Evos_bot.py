@@ -47,8 +47,14 @@ def create_user_log(user_id):
     cur.execute(sql)
     con.commit()
 
+
 def get_user_log(user_id):
     cur.execute(f"select message from log where user_id={user_id}")
     return cur.fetchone()
 
 
+def change_log(user_id, message):
+    sql = f'update log set message = "{message}" where user_id = {user_id}'
+    cur.execute(sql)
+    con.commit()
+    return get_user_log(user_id)
