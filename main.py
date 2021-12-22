@@ -7,7 +7,7 @@ from Evos_bot import *
 try:
     create_table_log()
     create_table()
-except Exception as e:
+except Exception:
     pass
 
 
@@ -46,6 +46,7 @@ def btns(tip=None):
         ]
     return ReplyKeyboardMarkup(btn, resize_keyboard=True)
 
+
 def to_dict(strr):
     return ast.literal_eval(strr)
 
@@ -65,6 +66,18 @@ def start(update, context):
 
 def message_handler(update, context):
     msg = update.message.text
+    user = update.message.from_user
+    log = to_dict(get_user_log(user.id)[0])
+    if log.get('state', 0) == 1:
+        log['ism'] = msg
+        log['state'] = 2
+        update.message.reply_text("Familiyangizni kiriting")
+    elif log.get('state', 0) == 2:
+        log['familiya'] = msg
+        log['state'] = 3
+        update.message.reply_text("Familiyangizni kiriting")
+
+    change_log(user.id, log)
 
 
 def inline_handler(update, context):
